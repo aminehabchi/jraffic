@@ -1,9 +1,68 @@
 package jraffic;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
 public class Car {
     private int x;
     private int y;
-    public Car() {
+    private Direction direction;
+    private Towards toward;
+    private final int width = 50;
+    private final int height = 50;
+    private Rectangle shape;
 
+    public Car(Direction d) {
+        direction = d;
+      
+
+        switch (d) {
+            case Up:
+                x = Constants.START_TOP[0];
+                y = Constants.START_TOP[1];
+                break;
+            case Down:
+                x = Constants.START_BOTTOM[0];
+                y = Constants.START_BOTTOM[1];
+                break;
+            case Left:
+                x = Constants.START_LEFT[0];
+                y = Constants.START_LEFT[1];
+                break;
+            case Right:
+                x = Constants.START_RIGHT[0];
+                y = Constants.START_RIGHT[1];
+                break;
+            default:
+        }
     }
+
+    public Rectangle getShape() {
+        // singlton desgin pattenrs
+        if (shape == null) {
+            shape = new Rectangle(width, height, Color.RED);
+            shape.setX(x);
+            shape.setY(y);
+        }
+        return shape;
+    }
+
+    public void move() {
+        switch (direction) {
+            case Up:
+                y += Constants.SPEED;
+                break;
+            case Down:
+                y -= Constants.SPEED;
+                break;
+            case Left:
+                x += Constants.SPEED;
+                break;
+            case Right:
+                x -= Constants.SPEED;
+                break;
+            default:
+        }
+    }
+
 }

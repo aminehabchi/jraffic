@@ -30,6 +30,23 @@ public class RoadController {
 
     private void handleKeyPress(KeyEvent event) {
         KeyCode code = event.getCode();
-        
+
+        switch (code) {
+            case UP:
+                Car c = new Car(Direction.Up);
+                intersectionPane.getChildren().add(c.getShape());
+                break;
+            case DOWN:
+
+                break;
+            case LEFT:
+
+                break;
+            case RIGHT:
+
+                break;
+            default:
+                break;
+        }
     }
 }
