@@ -1,38 +1,39 @@
 package jraffic;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-/**
- * JavaFX App
- */
 public class App extends Application {
-
-    private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("road.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 800, 800);
+            
+            // Set application properties
+            stage.setTitle("Traffic Intersection Simulator");
+            stage.setScene(scene);
+            stage.setResizable(false); // Keep fixed size for consistent intersection view
+            stage.centerOnScreen();
+            
+            // Show the application
+            stage.show();
+            
+        } catch (IOException e) {
+            System.err.println("Error loading FXML file: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
-
 }
