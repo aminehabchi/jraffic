@@ -78,10 +78,7 @@ public class Car {
     }
 
     public void move() {
-        if (isMustStop(direction)) {
-            isWait = true;
-            return;
-        }
+     
         switch (direction) {
             case Up:
                 if (toward.equals(toward.Right) && y >= Constants.ROAD_HEIGHT) {
@@ -127,34 +124,7 @@ public class Car {
         updateShape();
     }
 
-    private boolean isMustStop(Direction d) {
-        switch (d) {
-            case Up:
-                if (Constants.ROAD_HEIGHT - height - 2 < y && Constants.ROAD_HEIGHT - height >= y) {
-                    return true;
-                }
-                break;
-            case Down:
-                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > y
-                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= y) {
-                    return true;
-                }
-                break;
-            case Left:
-                if (Constants.ROAD_HEIGHT - height - 2 < x && Constants.ROAD_HEIGHT - height >= x) {
-                    return true;
-                }
-                break;
-            case Right:
-                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > x
-                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= x) {
-                    return true;
-                }
-                break;
-            default:
-        }
-        return false;
-    }
+   
 
     private void updateShape() {
         shape.setX(x);

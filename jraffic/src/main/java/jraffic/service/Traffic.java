@@ -31,27 +31,28 @@ public class Traffic {
 
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
+
             switch (car.getDirection()) {
                 case Up:
-                    if (a == -100 || (Math.abs(a - car.getY()) >= Constants.SAFEDISTANCE)) {
+                    if ((a == -100 || (Math.abs(a - car.getY()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
                         car.move();
                     }
                     a = car.getY();
                     break;
                 case Down:
-                    if (b == -100 || (Math.abs(b - car.getY()) >= Constants.SAFEDISTANCE)) {
+                    if ((b == -100 || (Math.abs(b - car.getY()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
                         car.move();
                     }
                     b = car.getY();
                     break;
                 case Left:
-                    if (c == -100 || (Math.abs(c - car.getX()) >= Constants.SAFEDISTANCE)) {
+                    if ((c == -100 || (Math.abs(c - car.getX()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
                         car.move();
                     }
                     c = car.getX();
                     break;
                 case Right:
-                    if (d == -100 || (Math.abs(d - car.getX()) >= Constants.SAFEDISTANCE)) {
+                    if ((d == -100 || (Math.abs(d - car.getX()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
                         car.move();
                     }
                     d = car.getX();
@@ -59,6 +60,37 @@ public class Traffic {
                 default:
             }
         }
+    }
+
+    private boolean isMustStop(Car car) {
+        switch (car.getDirection()) {
+            case Up:
+                if (Constants.ROAD_HEIGHT - Constants.CARSIZE - 2 < car.getY()
+                        && Constants.ROAD_HEIGHT - Constants.CARSIZE >= car.getY()) {
+                    return true;
+                }
+                break;
+            case Down:
+                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > car.getY()
+                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= car.getY()) {
+                    return true;
+                }
+                break;
+            case Left:
+                if (Constants.ROAD_HEIGHT - Constants.CARSIZE - 2 < car.getX()
+                        && Constants.ROAD_HEIGHT - Constants.CARSIZE >= car.getX()) {
+                    return true;
+                }
+                break;
+            case Right:
+                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > car.getX()
+                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= car.getX()) {
+                    return true;
+                }
+                break;
+            default:
+        }
+        return false;
     }
 
     public void createCar(KeyCode code) {
