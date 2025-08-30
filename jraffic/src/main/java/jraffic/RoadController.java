@@ -4,7 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 
 public class RoadController {
     Traffic traffic;
@@ -13,13 +12,10 @@ public class RoadController {
     private Pane intersectionPane;
 
     @FXML
-    private Circle redL;
-
-    @FXML
     public void initialize() {
         System.out.println("RoadController initialized!");
 
-        if (intersectionPane != null && redL != null) {
+        if (intersectionPane != null) {
             traffic = new Traffic(intersectionPane);
             intersectionPane.setFocusTraversable(true);
             intersectionPane.requestFocus();

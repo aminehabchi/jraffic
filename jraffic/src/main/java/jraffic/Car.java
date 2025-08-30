@@ -7,7 +7,7 @@ public class Car {
     private int x;
     private int y;
     private Direction direction;
-    private Towards toward;
+    private Towards toward = Towards.Left;
     private final int width = 50;
     private final int height = 50;
     private Rectangle shape;
@@ -49,16 +49,41 @@ public class Car {
     public void move() {
         switch (direction) {
             case Up:
-                y += Constants.SPEED;
+                if (toward.equals(toward.Right) && y >= Constants.ROAD_HEIGHT) {
+                    x -= Constants.SPEED;
+                } else if (toward.equals(toward.Left) && y >= Constants.ROAD_HEIGHT + height) {
+                    x += Constants.SPEED;
+                } else {
+                    y += Constants.SPEED;
+                }
                 break;
             case Down:
-                y -= Constants.SPEED;
+                if (toward.equals(toward.Right) && y + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
+                    x += Constants.SPEED;
+                } else if (toward.equals(toward.Left) && y <= Constants.ROAD_HEIGHT) {
+                    x -= Constants.SPEED;
+                } else {
+                    y -= Constants.SPEED;
+                }
                 break;
             case Left:
-                x += Constants.SPEED;
+                if (toward.equals(toward.Right) && x >= Constants.ROAD_HEIGHT) {
+                    y += Constants.SPEED;
+                } else if (toward.equals(toward.Left) && x >= Constants.ROAD_HEIGHT + height) {
+                    y -= Constants.SPEED;
+                } else {
+                    x += Constants.SPEED;
+                }
                 break;
             case Right:
-                x -= Constants.SPEED;
+                if (toward.equals(toward.Right) && x + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
+                    y -= Constants.SPEED;
+                } else if (toward.equals(toward.Left)
+                        && x <= Constants.ROAD_HEIGHT) {
+                    y += Constants.SPEED;
+                } else {
+                    x -= Constants.SPEED;
+                }
                 break;
             default:
         }

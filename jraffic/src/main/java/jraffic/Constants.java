@@ -10,7 +10,7 @@ public class Constants {
 
     // Road dimensions
     public static final int ROAD_WIDTH = 100;
-    public static final int ROAD_HEIGHT = 100;
+    public static final int ROAD_HEIGHT = 350;
 
     // Traffic speed (pixels per update)
     public static final int SPEED = 2;
