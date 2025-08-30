@@ -12,6 +12,9 @@ public class Constants {
     public static final int ROAD_WIDTH = 100;
     public static final int ROAD_HEIGHT = 350;
 
+    // car size
+    public static final int CARSIZE = ROAD_WIDTH / 2;
+
     // Traffic speed (pixels per update)
     public static final int SPEED = 2;
 
@@ -30,5 +33,11 @@ public class Constants {
     public static final Color ORANGE = Color.rgb(255, 140, 0);
     public static final Color BLUE = Color.rgb(30, 144, 255);
     public static final Color YELLOW = Color.web("#fffb00ff");
+
+    // Safe Distance
+    public static final int SAFEDISTANCE = (int) (CARSIZE * 1.2);
+
+    // max cars in every road
+    public static final int MAXCARS = ROAD_HEIGHT / SAFEDISTANCE;
 
 }

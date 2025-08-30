@@ -15,6 +15,8 @@ public class Car {
     private final int width = 50;
     private final int height = 50;
     private Rectangle shape;
+    public boolean isWait = false;
+    public boolean isInIntersectoin = false;
 
     public Car(Direction d, Towards t) {
         direction = d;
@@ -53,6 +55,18 @@ public class Car {
         }
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public Rectangle getShape() {
         // singlton desgin pattenrs
         if (shape == null) {
@@ -65,6 +79,7 @@ public class Car {
 
     public void move() {
         if (isMustStop(direction)) {
+            isWait = true;
             return;
         }
         switch (direction) {

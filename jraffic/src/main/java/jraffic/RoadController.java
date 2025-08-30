@@ -4,7 +4,6 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import jraffic.service.Car;
 import jraffic.service.Traffic;
 
 public class RoadController {
@@ -26,9 +25,7 @@ public class RoadController {
             AnimationTimer gameLoop = new AnimationTimer() {
                 @Override
                 public void handle(long now) {
-                    for (Car c : traffic.cars) {
-                        c.move();
-                    }
+                    traffic.moveCars();
                 }
             };
             gameLoop.start();
