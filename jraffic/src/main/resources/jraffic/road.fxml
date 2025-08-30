@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
@@ -7,59 +6,59 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.paint.Color?>
-
 <StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
            prefWidth="800" prefHeight="800" style="-fx-background-color: #2d5a27;">
-
     <!-- Main road container -->
     <Pane>
-        
         <!-- Vertical road (North-South) -->
         <Rectangle x="350" y="0" width="100" height="800" style="-fx-fill: #404040;"/>
-        
         <!-- Horizontal road (East-West) -->
         <Rectangle x="0" y="350" width="800" height="100" style="-fx-fill: #404040;"/>
-        
-        <!-- Intersection area -->
-        <Rectangle x="350" y="350" width="100" height="100" style="-fx-fill: #505050;"/>
         
         <!-- Road lane dividers -->
         <!-- Vertical road lane divider -->
         <Line startX="400" startY="0" endX="400" endY="350" stroke="yellow" strokeWidth="2" strokeDashArray="10,8"/>
         <Line startX="400" startY="450" endX="400" endY="800" stroke="yellow" strokeWidth="2" strokeDashArray="10,8"/>
-        
         <!-- Horizontal road lane divider -->
         <Line startX="0" startY="400" endX="350" endY="400" stroke="yellow" strokeWidth="2" strokeDashArray="10,8"/>
         <Line startX="450" startY="400" endX="800" endY="400" stroke="yellow" strokeWidth="2" strokeDashArray="10,8"/>
+
+      
+
+        <!-- Traffic light poles -->
+        <!-- North-West corner -->
+        <!-- Traffic light box -->
+        <Rectangle x="325" y="310" width="18" height="30" style="-fx-fill: #333333;"/>
+        <!-- Red light -->
+        <Circle centerX="334" centerY="318" radius="4" style="-fx-fill: red;"/>
+        <!-- Green light -->
+        <Circle centerX="334" centerY="332" radius="4" style="-fx-fill: #006600;"/>
         
-        <!-- Traffic flow arrows -->
-        <!-- North bound (right lane) -->
-        <Text x="370" y="180" style="-fx-font-size: 28px; -fx-fill: white;">↓</Text>
-        <Text x="370" y="240" style="-fx-font-size: 28px; -fx-fill: white;">↓</Text>
-        <Text x="370" y="120" style="-fx-font-size: 28px; -fx-fill: white;">↓</Text>
+        <!-- North-East corner -->
+        <!-- Traffic light box -->
+        <Rectangle x="457" y="310" width="18" height="30" style="-fx-fill: #333333;"/>
+        <!-- Red light -->
+        <Circle centerX="466" centerY="318" radius="4" style="-fx-fill: #660000;"/>
+        <!-- Green light -->
+        <Circle centerX="466" centerY="332" radius="4" style="-fx-fill: green;"/>
         
-        <!-- South bound (left lane) -->
-        <Text x="420" y="620" style="-fx-font-size: 28px; -fx-fill: white;">↑</Text>
-        <Text x="420" y="680" style="-fx-font-size: 28px; -fx-fill: white;">↑</Text>
-        <Text x="420" y="560" style="-fx-font-size: 28px; -fx-fill: white;">↑</Text>
+        <!-- South-West corner -->
+        <!-- Traffic light box -->
+        <Rectangle x="325" y="460" width="18" height="30" style="-fx-fill: #333333;"/>
+        <!-- Red light -->
+        <Circle centerX="334" centerY="468" radius="4" style="-fx-fill: red;"/>
+        <!-- Green light -->
+        <Circle centerX="334" centerY="482" radius="4" style="-fx-fill: #006600;"/>
         
-        <!-- East bound (bottom lane) -->
-        <Text x="180" y="430" style="-fx-font-size: 28px; -fx-fill: white;">→</Text>
-        <Text x="240" y="430" style="-fx-font-size: 28px; -fx-fill: white;">→</Text>
-        <Text x="120" y="430" style="-fx-font-size: 28px; -fx-fill: white;">→</Text>
-        
-        <!-- West bound (top lane) -->
-        <Text x="620" y="380" style="-fx-font-size: 28px; -fx-fill: white;">←</Text>
-        <Text x="680" y="380" style="-fx-font-size: 28px; -fx-fill: white;">←</Text>
-        <Text x="560" y="380" style="-fx-font-size: 28px; -fx-fill: white;">←</Text>
-        
-    
+        <!-- South-East corner -->
+        <!-- Traffic light box -->
+        <Rectangle x="457" y="460" width="18" height="30" style="-fx-fill: #333333;"/>
+        <!-- Red light -->
+        <Circle centerX="466" centerY="468" radius="4" style="-fx-fill: #660000;"/>
+        <!-- Green light -->
+        <Circle centerX="466" centerY="482" radius="4" style="-fx-fill: green;"/>
+
+        <!-- Center circle (intersection marker) -->
         <Circle centerX="400" centerY="400" radius="10" style="-fx-fill: green;"/>
-
-        
-       
-
-        
     </Pane>
-    
 </StackPane>
