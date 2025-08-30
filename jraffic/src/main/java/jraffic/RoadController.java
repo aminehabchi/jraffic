@@ -1,52 +1,45 @@
 package jraffic;
 
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
 public class RoadController {
+    Traffic traffic;
 
     @FXML
     private Pane intersectionPane;
 
     @FXML
-    private Circle redL; // Injected from FXML, do NOT create new Circle
+    private Circle redL;
 
     @FXML
     public void initialize() {
         System.out.println("RoadController initialized!");
 
         if (intersectionPane != null && redL != null) {
-
+            traffic = new Traffic(intersectionPane);
             intersectionPane.setFocusTraversable(true);
             intersectionPane.requestFocus();
             intersectionPane.setOnKeyPressed(this::handleKeyPress);
+
+            AnimationTimer gameLoop = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    for (Car c : traffic.cars) {
+                        c.move();
+                    }
+                }
+            };
+            gameLoop.start();
         } else {
             System.err.println("intersectionPane or redR is null - check fx:id in FXML");
         }
     }
 
     private void handleKeyPress(KeyEvent event) {
-        KeyCode code = event.getCode();
-
-        switch (code) {
-            case UP:
-                Car c = new Car(Direction.Up);
-                intersectionPane.getChildren().add(c.getShape());
-                break;
-            case DOWN:
-
-                break;
-            case LEFT:
-
-                break;
-            case RIGHT:
-
-                break;
-            default:
-                break;
-        }
+        traffic.createCar(event.getCode());
     }
 }

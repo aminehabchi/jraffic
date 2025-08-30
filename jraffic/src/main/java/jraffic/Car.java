@@ -14,7 +14,6 @@ public class Car {
 
     public Car(Direction d) {
         direction = d;
-      
 
         switch (d) {
             case Up:
@@ -63,6 +62,12 @@ public class Car {
                 break;
             default:
         }
+        updateShape();
+    }
+
+    private void updateShape() {
+        shape.setX(x);
+        shape.setY(y);
     }
 
 }
