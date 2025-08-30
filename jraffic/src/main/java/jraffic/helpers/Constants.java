@@ -1,4 +1,4 @@
-package jraffic;
+package jraffic.helpers;
 
 import javafx.scene.paint.Color;
 
@@ -25,6 +25,10 @@ public class Constants {
     // Traffic light colors
     public static final Color RED = Color.RED;
     public static final Color GREEN = Color.GREEN;
-    public static final Color YELLOW = Color.YELLOW;
+
+    // Cars Colors
+    public static final Color ORANGE = Color.rgb(255, 140, 0);
+    public static final Color BLUE = Color.rgb(30, 144, 255);
+    public static final Color YELLOW = Color.web("#fffb00ff");
 
 }

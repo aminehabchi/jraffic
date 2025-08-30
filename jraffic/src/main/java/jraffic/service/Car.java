@@ -1,20 +1,37 @@
-package jraffic;
+package jraffic.service;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import jraffic.helpers.Constants;
+import jraffic.helpers.Direction;
+import jraffic.helpers.Towards;
 
 public class Car {
     private int x;
     private int y;
     private Direction direction;
     private Towards toward = Towards.Left;
+    private Color color;
     private final int width = 50;
     private final int height = 50;
     private Rectangle shape;
 
-    public Car(Direction d) {
+    public Car(Direction d, Towards t) {
         direction = d;
-
+        toward = t;
+        switch (t) {
+            case Forward:
+                color = Constants.ORANGE;
+                break;
+            case Left:
+                color = Constants.BLUE;
+                break;
+            case Right:
+                color = Constants.YELLOW;
+                break;
+            default:
+                throw new AssertionError();
+        }
         switch (d) {
             case Up:
                 x = Constants.START_TOP[0];
@@ -39,7 +56,7 @@ public class Car {
     public Rectangle getShape() {
         // singlton desgin pattenrs
         if (shape == null) {
-            shape = new Rectangle(width, height, Color.RED);
+            shape = new Rectangle(width, height, color);
             shape.setX(x);
             shape.setY(y);
         }
@@ -47,6 +64,9 @@ public class Car {
     }
 
     public void move() {
+        if (isMustStop(direction)) {
+            return;
+        }
         switch (direction) {
             case Up:
                 if (toward.equals(toward.Right) && y >= Constants.ROAD_HEIGHT) {
@@ -58,7 +78,8 @@ public class Car {
                 }
                 break;
             case Down:
-                if (toward.equals(toward.Right) && y + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
+                if (toward.equals(toward.Right)
+                        && y + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
                     x += Constants.SPEED;
                 } else if (toward.equals(toward.Left) && y <= Constants.ROAD_HEIGHT) {
                     x -= Constants.SPEED;
@@ -76,7 +97,8 @@ public class Car {
                 }
                 break;
             case Right:
-                if (toward.equals(toward.Right) && x + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
+                if (toward.equals(toward.Right)
+                        && x + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
                     y -= Constants.SPEED;
                 } else if (toward.equals(toward.Left)
                         && x <= Constants.ROAD_HEIGHT) {
@@ -88,6 +110,35 @@ public class Car {
             default:
         }
         updateShape();
+    }
+
+    private boolean isMustStop(Direction d) {
+        switch (d) {
+            case Up:
+                if (Constants.ROAD_HEIGHT - height - 2 < y && Constants.ROAD_HEIGHT - height >= y) {
+                    return true;
+                }
+                break;
+            case Down:
+                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > y
+                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= y) {
+                    return true;
+                }
+                break;
+            case Left:
+                if (Constants.ROAD_HEIGHT - height - 2 < x && Constants.ROAD_HEIGHT - height >= x) {
+                    return true;
+                }
+                break;
+            case Right:
+                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > x
+                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= x) {
+                    return true;
+                }
+                break;
+            default:
+        }
+        return false;
     }
 
     private void updateShape() {

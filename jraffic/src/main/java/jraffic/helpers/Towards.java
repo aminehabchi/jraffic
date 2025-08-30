@@ -1,4 +1,4 @@
-package jraffic;
+package jraffic.helpers;
 
 public enum Towards {
     Forward,
