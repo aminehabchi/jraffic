@@ -94,12 +94,9 @@ public class Traffic {
         int carBottom = carY + carSize;
 
         return (carRight < rectLeft
-                ||
-                carLeft > rectRight
-                ||
-                carBottom < rectTop
-                ||
-                carTop > rectBottom);
+                || carLeft > rectRight
+                || carBottom < rectTop
+                || carTop > rectBottom);
     }
 
     private void algo() {
@@ -385,13 +382,13 @@ class TrafficHelper {
     public Direction getDirectionFromKeyCode(KeyCode code) {
         switch (code) {
             case UP:
-                return Direction.Up;
-            case DOWN:
                 return Direction.Down;
+            case DOWN:
+                return Direction.Up;
             case LEFT:
-                return Direction.Left;
-            case RIGHT:
                 return Direction.Right;
+            case RIGHT:
+                return Direction.Left;
             case R:
                 return randomDirection();
             case ESCAPE:
