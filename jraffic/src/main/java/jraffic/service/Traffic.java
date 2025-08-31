@@ -159,7 +159,6 @@ public class Traffic {
     }
 
     public boolean checkIfCanMove(Car car1, Car car2) {
-        
 
         if ((car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up)
                 || (car1.getDirection() == Direction.Up && car2.getDirection() == Direction.Down)
@@ -281,13 +280,6 @@ class TrafficHelper {
         return isMustStop(firstCar) ? firstCar : null;
     }
 
-    /**
-     * Moves cars in a list maintaining safe distance
-     *
-     * @param cars       List of cars to move
-     * @param isVertical true for vertical movement (Y axis), false for
-     *                   horizontal (X axis)
-     */
     public void moveCarList(List<Car> cars, boolean isVertical) {
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
@@ -309,13 +301,6 @@ class TrafficHelper {
         }
     }
 
-    /**
-     * Determines if a car must stop based on traffic rules and intersection
-     * boundaries
-     *
-     * @param car The car to check
-     * @return true if car must stop, false otherwise
-     */
     private boolean isMustStop(Car car) {
         if (car == null) {
             return false;
@@ -335,12 +320,6 @@ class TrafficHelper {
         }
     }
 
-    /**
-     * Converts KeyCode to Direction enum
-     *
-     * @param code KeyCode from user input
-     * @return Corresponding Direction or null if invalid
-     */
     public Direction getDirectionFromKeyCode(KeyCode code) {
         switch (code) {
             case UP:
@@ -351,16 +330,19 @@ class TrafficHelper {
                 return Direction.Left;
             case RIGHT:
                 return Direction.Right;
+            case R:
+                return randomDirection();
             default:
                 return null;
         }
     }
 
-    /**
-     * Generates a random direction for cars to turn at intersection
-     *
-     * @return Random Towards direction (Forward, Left, or Right)
-     */
+    private Direction randomDirection() {
+        Direction[] directions = Direction.values();
+        int index = new java.util.Random().nextInt(directions.length);
+        return directions[index];
+    }
+
     public Towards getRandomTowards() {
         int method = random.nextInt(3);
         switch (method) {
