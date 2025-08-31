@@ -20,6 +20,8 @@ public class Traffic {
     private Pane roadPane;
     private TrafficHelper helper;
     private int id;
+    private final long[] lastCarTime = new long[5]; // [UP, DOWN, LEFT, RIGHT]
+    private final long cooldownMs = Constants.TIME; // 3 seconds cooldown per direction
 
     public Traffic(Pane roadPane) {
         this.roadPane = roadPane;
@@ -79,38 +81,48 @@ public class Traffic {
         return false;
     }
 
-    public void removeCarsofOutIntersection(){
+    public void removeCarsofOutIntersection() {
 
     }
 
     public void createCar(KeyCode code) {
         Car car = null;
+        long nowTime = System.currentTimeMillis() / 15;
         List<Car> targetList = null;
         Direction direction = null;
-
+        int directionIndex = 1;
         switch (code) {
             case UP:
-                if (carsT.size() <= Constants.MAXCARS) {
+                directionIndex = 0;
+                if (canCreateCar(directionIndex, nowTime) && carsT.size() <= Constants.MAXCARS) {
                     direction = Direction.Up;
                     targetList = carsT;
+                    lastCarTime[0] = nowTime;
                 }
                 break;
             case DOWN:
-                if (carsD.size() <= Constants.MAXCARS) {
+                directionIndex = 1;
+
+                if (canCreateCar(directionIndex, nowTime) && carsD.size() <= Constants.MAXCARS) {
                     direction = Direction.Down;
                     targetList = carsD;
+                    lastCarTime[1] = nowTime;
                 }
                 break;
             case LEFT:
-                if (carsL.size() <= Constants.MAXCARS) {
+                directionIndex = 2;
+                if (canCreateCar(directionIndex, nowTime) && carsL.size() <= Constants.MAXCARS) {
                     direction = Direction.Left;
                     targetList = carsL;
+                    lastCarTime[2] = nowTime;
                 }
                 break;
             case RIGHT:
-                if (carsR.size() <= Constants.MAXCARS) {
+                directionIndex = 3;
+                if (canCreateCar(directionIndex, nowTime) && carsR.size() <= Constants.MAXCARS) {
                     direction = Direction.Right;
                     targetList = carsR;
+                    lastCarTime[3] = nowTime;
                 }
                 break;
             default:
@@ -124,9 +136,15 @@ public class Traffic {
             roadPane.getChildren().add(car.getShape());
         }
     }
+
+    private boolean canCreateCar(int directionIndex, long currentTime) {
+        long timeSinceLastCar = currentTime - lastCarTime[directionIndex];
+        return timeSinceLastCar >= cooldownMs;
+    }
 }
 
 class TrafficHelper {
+
     private Random random;
 
     public TrafficHelper() {

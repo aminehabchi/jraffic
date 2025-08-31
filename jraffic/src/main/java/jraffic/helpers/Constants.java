@@ -39,5 +39,6 @@ public class Constants {
 
     // max cars in every road
     public static final int MAXCARS = ROAD_HEIGHT / SAFEDISTANCE;
+    public static final  int TIME=SAFEDISTANCE/SPEED;
 
 }
