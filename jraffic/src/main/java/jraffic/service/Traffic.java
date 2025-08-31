@@ -71,6 +71,8 @@ public class Traffic {
             }
         }
 
+        /// 
+
         algo();
         System.err.println("Inside: " + carsInside.size() + " Outside: " + carsOutside.size()
                 + " T: " + carsT.size() + " D: " + carsD.size()

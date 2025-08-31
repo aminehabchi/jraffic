@@ -6,50 +6,336 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.paint.Color?>
-<StackPane xmlns="http://javafx.com/javafx/8.0.171" fx:controller="jraffic.RoadController"
-    xmlns:fx="http://javafx.com/fxml/1"
-    prefWidth="800" prefHeight="800" style="-fx-background-color: #2d5a27;">
-    <!-- Main road container -->
-    <Pane fx:id="intersectionPane">
-        <!-- Vertical road (North-South) -->
-        <Rectangle x="350" y="0" width="100" height="800" style="-fx-fill: #404040;" />
-        <!-- Horizontal road (East-West) -->
-        <Rectangle x="0" y="350" width="800" height="100" style="-fx-fill: #404040;" />
-        <!-- Road lane dividers -->
-        <!-- Vertical road lane divider -->
-        <Line startX="400" startY="0" endX="400" endY="350" stroke="yellow" strokeWidth="2"
-            strokeDashArray="10,8" />
-        <Line startX="400" startY="450" endX="400" endY="800" stroke="yellow" strokeWidth="2"
-            strokeDashArray="10,8" />
-        <!-- Horizontal road lane divider -->
-        <Line startX="0" startY="400" endX="350" endY="400" stroke="yellow" strokeWidth="2"
-            strokeDashArray="10,8" />
-        <Line startX="450" startY="400" endX="800" endY="400" stroke="yellow" strokeWidth="2"
-            strokeDashArray="10,8" />
 
-        <!-- Traffic light poles -->
-        <!-- top -->
-        <!-- North Traffic Light (top) -->
-        <Rectangle x="325" y="310" width="18" height="30" style="-fx-fill: #333333;" />
-        <Circle fx:id="northRed" centerX="334" centerY="318" radius="4" style="-fx-fill: red;" />
-        <Circle fx:id="northGreen" centerX="334" centerY="332" radius="4" style="-fx-fill: #006600;" />
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" fx:controller="jraffic.RoadController" xmlns:fx="http://javafx.com/fxml/1"
+prefWidth="800" prefHeight="800" style="-fx-background-color: #2a4a3a;">
 
-        <!-- South Traffic Light (down) -->
-        <Rectangle x="457" y="310" width="18" height="30" style="-fx-fill: #333333;" />
-        <Circle fx:id="southRed" centerX="466" centerY="318" radius="4" style="-fx-fill: #660000;" />
-        <Circle fx:id="southGreen" centerX="466" centerY="332" radius="4" style="-fx-fill: green;" />
+<Pane fx:id="intersectionPane">
 
-        <!-- East Traffic Light (right) -->
-        <Rectangle x="325" y="460" width="18" height="30" style="-fx-fill: #333333;" />
-        <Circle fx:id="eastRed" centerX="334" centerY="468" radius="4" style="-fx-fill: red;" />
-        <Circle fx:id="eastGreen" centerX="334" centerY="482" radius="4" style="-fx-fill: #006600;" />
+<!-- Buildings with realistic styling -->
+<!-- Office Building 1 (Northwest) -->
+<Rectangle x="30" y="30" width="120" height="180" style="-fx-fill: #6a6a6a; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="40" y="40" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="125" y="40" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="40" y="80" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="125" y="80" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="40" y="120" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="125" y="120" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="40" y="160" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="125" y="160" width="15" height="15" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
 
-        <!-- West Traffic Light (left) -->
-        <Rectangle x="457" y="460" width="18" height="30" style="-fx-fill: #333333;" />
-        <Circle fx:id="westRed" centerX="466" centerY="468" radius="4" style="-fx-fill: #660000;" />
-        <Circle fx:id="westGreen" centerX="466" centerY="482" radius="4" style="-fx-fill: green;" />
+<!-- Office Building 2 (North-Center) -->
+<Rectangle x="170" y="50" width="90" height="140" style="-fx-fill: #8a8a8a; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="180" y="60" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="238" y="60" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="180" y="90" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="238" y="90" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="180" y="120" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="238" y="120" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
 
-        <!-- Center circle (intersection marker) -->
-        <Circle centerX="400" centerY="400" radius="10" style="-fx-fill: green;" />
-    </Pane>
+<!-- Office Building 3 (Northeast) -->
+<Rectangle x="520" y="40" width="140" height="160" style="-fx-fill: #909090; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="530" y="50" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="634" y="50" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="530" y="90" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="634" y="90" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="530" y="130" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="634" y="130" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="530" y="170" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="634" y="170" width="16" height="16" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+
+<!-- Apartment Building 4 (Far Northeast) -->
+<Rectangle x="680" y="80" width="90" height="120" style="-fx-fill: #606060; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="690" y="90" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="748" y="90" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="690" y="120" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="748" y="120" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="690" y="150" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="748" y="150" width="12" height="12" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+
+<!-- Office Building 5 (Southwest) -->
+<Rectangle x="30" y="580" width="130" height="170" style="-fx-fill: #5a5a5a; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="42" y="590" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="136" y="590" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="42" y="630" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="136" y="630" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="42" y="670" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="136" y="670" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="42" y="710" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="136" y="710" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+
+<!-- Retail Building 6 (South-Center) -->
+<Rectangle x="180" y="600" width="100" height="150" style="-fx-fill: #7a7a7a; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="190" y="610" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="257" y="610" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="190" y="650" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="257" y="650" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="190" y="690" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="257" y="690" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+
+<!-- High-rise Building 7 (Southeast) -->
+<Rectangle x="540" y="590" width="120" height="140" style="-fx-fill: #757575; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="550" y="600" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="636" y="600" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="550" y="640" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="636" y="640" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="550" y="680" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="636" y="680" width="14" height="14" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+
+<!-- Apartment Building 8 (Far Southeast) -->
+<Rectangle x="680" y="620" width="100" height="130" style="-fx-fill: #656565; -fx-stroke: #333; -fx-stroke-width: 2;"/>
+<Rectangle x="690" y="630" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="757" y="630" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="690" y="670" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="757" y="670" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+<Rectangle x="690" y="710" width="13" height="13" style="-fx-fill: #ffeb3b; -fx-stroke: #f57f17;"/>
+
+<!-- Main Roads with realistic asphalt texture (thinner for cars) -->
+<!-- Vertical road (North-South) -->
+<Rectangle x="340" y="0" width="120" height="800" style="-fx-fill: linear-gradient(to right, #2c2c2c, #3a3a3a, #2c2c2c); -fx-stroke: #555; -fx-stroke-width: 2;"/>
+
+<!-- Horizontal road (East-West) -->
+<Rectangle x="0" y="340" width="800" height="120" style="-fx-fill: linear-gradient(to bottom, #2c2c2c, #3a3a3a, #2c2c2c); -fx-stroke: #555; -fx-stroke-width: 2;"/>
+
+<!-- Sidewalks -->
+<Rectangle x="320" y="0" width="20" height="340" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="460" y="0" width="20" height="340" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="320" y="460" width="20" height="340" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="460" y="460" width="20" height="340" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="0" y="320" width="340" height="20" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="460" y="320" width="340" height="20" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="0" y="460" width="340" height="20" style="-fx-fill: #666; -fx-stroke: #888;"/>
+<Rectangle x="460" y="460" width="340" height="20" style="-fx-fill: #666; -fx-stroke: #888;"/>
+
+<!-- Lane dividers with dashed lines (adjusted for thinner roads) -->
+<!-- Vertical road lane divider -->
+<Line startX="400" startY="0" endX="400" endY="340" stroke="#ffeb3b" strokeWidth="2" strokeDashArray="15,10"/>
+<Line startX="400" startY="460" endX="400" endY="800" stroke="#ffeb3b" strokeWidth="2" strokeDashArray="15,10"/>
+
+<!-- Horizontal road lane divider -->
+<Line startX="0" startY="400" endX="340" endY="400" stroke="#ffeb3b" strokeWidth="2" strokeDashArray="15,10"/>
+<Line startX="460" startY="400" endX="800" endY="400" stroke="#ffeb3b" strokeWidth="2" strokeDashArray="15,10"/>
+
+<!-- Intersection area (smaller) -->
+<Rectangle x="340" y="340" width="120" height="120" style="-fx-fill: #3a3a3a; -fx-stroke: #555; -fx-stroke-width: 2;"/>
+
+<!-- Crosswalks with zebra stripes (adjusted positions) -->
+<!-- North crosswalk -->
+<Rectangle x="350" y="320" width="100" height="10" style="-fx-fill: white;"/>
+<Rectangle x="360" y="320" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="380" y="320" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="400" y="320" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="420" y="320" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="440" y="320" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+
+<!-- South crosswalk -->
+<Rectangle x="350" y="470" width="100" height="10" style="-fx-fill: white;"/>
+<Rectangle x="360" y="470" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="380" y="470" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="400" y="470" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="420" y="470" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="440" y="470" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+
+<!-- East crosswalk -->
+<Rectangle x="470" y="350" width="10" height="100" style="-fx-fill: white;"/>
+<Rectangle x="470" y="360" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="470" y="380" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="470" y="400" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="470" y="420" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="470" y="440" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+
+<!-- West crosswalk -->
+<Rectangle x="320" y="350" width="10" height="100" style="-fx-fill: white;"/>
+<Rectangle x="320" y="360" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="320" y="380" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="320" y="400" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="320" y="420" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+<Rectangle x="320" y="440" width="10" height="10" style="-fx-fill: #3a3a3a;"/>
+
+<!-- Stop lines (adjusted positions) -->
+<Rectangle x="350" y="335" width="100" height="3" style="-fx-fill: white;"/>
+<Rectangle x="350" y="462" width="100" height="3" style="-fx-fill: white;"/>
+<Rectangle x="335" y="350" width="3" height="100" style="-fx-fill: white;"/>
+<Rectangle x="462" y="350" width="3" height="100" style="-fx-fill: white;"/>
+
+<!-- Traffic light poles with realistic design (adjusted positions) -->
+<!-- Northwest traffic light -->
+<Rectangle x="315" y="300" width="8" height="40" style="-fx-fill: #333;"/>
+<Rectangle x="311" y="295" width="16" height="25" style="-fx-fill: #222; -fx-arc-width: 8; -fx-arc-height: 8;"/>
+<Circle centerX="319" centerY="302" radius="3" fx:id="redNW" style="-fx-fill: #ff4444;"/>
+<Circle centerX="319" centerY="310" radius="3" style="-fx-fill: #664400;"/>
+<Circle centerX="319" centerY="318" radius="3" style="-fx-fill: #006600;"/>
+
+<!-- Northeast traffic light -->
+<Rectangle x="477" y="300" width="8" height="40" style="-fx-fill: #333;"/>
+<Rectangle x="473" y="295" width="16" height="25" style="-fx-fill: #222; -fx-arc-width: 8; -fx-arc-height: 8;"/>
+<Circle centerX="481" centerY="302" radius="3" fx:id="redNE" style="-fx-fill: #660000;"/>
+<Circle centerX="481" centerY="310" radius="3" style="-fx-fill: #664400;"/>
+<Circle centerX="481" centerY="318" radius="3" fx:id="greenNE" style="-fx-fill: #44ff44;"/>
+
+<!-- Southwest traffic light -->
+<Rectangle x="315" y="460" width="8" height="40" style="-fx-fill: #333;"/>
+<Rectangle x="311" y="480" width="16" height="25" style="-fx-fill: #222; -fx-arc-width: 8; -fx-arc-height: 8;"/>
+<Circle centerX="319" centerY="487" radius="3" fx:id="redSW" style="-fx-fill: #ff4444;"/>
+<Circle centerX="319" centerY="495" radius="3" style="-fx-fill: #664400;"/>
+<Circle centerX="319" centerY="503" radius="3" style="-fx-fill: #006600;"/>
+
+<!-- Southeast traffic light -->
+<Rectangle x="477" y="460" width="8" height="40" style="-fx-fill: #333;"/>
+<Rectangle x="473" y="480" width="16" height="25" style="-fx-fill: #222; -fx-arc-width: 8; -fx-arc-height: 8;"/>
+<Circle centerX="481" centerY="487" radius="3" fx:id="redSE" style="-fx-fill: #660000;"/>
+<Circle centerX="481" centerY="495" radius="3" style="-fx-fill: #664400;"/>
+<Circle centerX="481" centerY="503" radius="3" fx:id="greenSE" style="-fx-fill: #44ff44;"/>
+
+<!-- Trees for landscaping -->
+<Circle centerX="280" centerY="250" radius="12" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="277" y="260" width="6" height="15" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="520" centerY="250" radius="12" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="517" y="260" width="6" height="15" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="280" centerY="530" radius="12" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="277" y="540" width="6" height="15" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="520" centerY="530" radius="12" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="517" y="540" width="6" height="15" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="200" centerY="100" radius="10" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="197" y="108" width="6" height="12" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="600" centerY="100" radius="10" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="597" y="108" width="6" height="12" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="200" centerY="680" radius="10" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="197" y="688" width="6" height="12" style="-fx-fill: #8B4513;"/>
+
+<Circle centerX="600" centerY="680" radius="10" style="-fx-fill: radial-gradient(center 30% 30%, radius 80%, #228B22, #006400);"/>
+<Rectangle x="597" y="688" width="6" height="12" style="-fx-fill: #8B4513;"/>
+
+<!-- Parking lots with parking spaces -->
+<Rectangle x="170" y="220" width="80" height="60" style="-fx-fill: #4a4a4a; -fx-stroke: #666; -fx-stroke-width: 1; -fx-stroke-dash-array: 5;"/>
+<Line startX="170" startY="240" endX="250" endY="240" stroke="#666" strokeWidth="1"/>
+<Line startX="170" startY="260" endX="250" endY="260" stroke="#666" strokeWidth="1"/>
+<Line startX="190" startY="220" endX="190" endY="280" stroke="#666" strokeWidth="1"/>
+<Line startX="210" startY="220" endX="210" endY="280" stroke="#666" strokeWidth="1"/>
+<Line startX="230" startY="220" endX="230" endY="280" stroke="#666" strokeWidth="1"/>
+
+<Rectangle x="550" y="220" width="80" height="60" style="-fx-fill: #4a4a4a; -fx-stroke: #666; -fx-stroke-width: 1; -fx-stroke-dash-array: 5;"/>
+<Line startX="550" startY="240" endX="630" endY="240" stroke="#666" strokeWidth="1"/>
+<Line startX="550" startY="260" endX="630" endY="260" stroke="#666" strokeWidth="1"/>
+<Line startX="570" startY="220" endX="570" endY="280" stroke="#666" strokeWidth="1"/>
+<Line startX="590" startY="220" endX="590" endY="280" stroke="#666" strokeWidth="1"/>
+<Line startX="610" startY="220" endX="610" endY="280" stroke="#666" strokeWidth="1"/>
+
+<Rectangle x="170" y="520" width="80" height="60" style="-fx-fill: #4a4a4a; -fx-stroke: #666; -fx-stroke-width: 1; -fx-stroke-dash-array: 5;"/>
+<Line startX="170" startY="540" endX="250" endY="540" stroke="#666" strokeWidth="1"/>
+<Line startX="170" startY="560" endX="250" endY="560" stroke="#666" strokeWidth="1"/>
+<Line startX="190" startY="520" endX="190" endY="580" stroke="#666" strokeWidth="1"/>
+<Line startX="210" startY="520" endX="210" endY="580" stroke="#666" strokeWidth="1"/>
+<Line startX="230" startY="520" endX="230" endY="580" stroke="#666" strokeWidth="1"/>
+
+<Rectangle x="550" y="520" width="80" height="60" style="-fx-fill: #4a4a4a; -fx-stroke: #666; -fx-stroke-width: 1; -fx-stroke-dash-array: 5;"/>
+<Line startX="550" startY="540" endX="630" endY="540" stroke="#666" strokeWidth="1"/>
+<Line startX="550" startY="560" endX="630" endY="560" stroke="#666" strokeWidth="1"/>
+<Line startX="570" startY="520" endX="570" endY="580" stroke="#666" strokeWidth="1"/>
+<Line startX="590" startY="520" endX="590" endY="580" stroke="#666" strokeWidth="1"/>
+<Line startX="610" startY="520" endX="610" endY="580" stroke="#666" strokeWidth="1"/>
+
+<!-- Manholes -->
+<Circle centerX="360" centerY="150" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="440" centerY="150" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="360" centerY="650" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="440" centerY="650" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="150" centerY="360" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="150" centerY="440" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="650" centerY="360" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+<Circle centerX="650" centerY="440" radius="6" style="-fx-fill: #333; -fx-stroke: #555;"/>
+
+<!-- Street signs -->
+<Rectangle x="275" y="270" width="4" height="25" style="-fx-fill: #666;"/>
+<Rectangle x="267" y="270" width="20" height="12" style="-fx-fill: white; -fx-stroke: #333;"/>
+
+<Rectangle x="521" y="270" width="4" height="25" style="-fx-fill: #666;"/>
+<Rectangle x="513" y="270" width="20" height="12" style="-fx-fill: white; -fx-stroke: #333;"/>
+
+<Rectangle x="275" y="505" width="4" height="25" style="-fx-fill: #666;"/>
+<Rectangle x="267" y="518" width="20" height="12" style="-fx-fill: white; -fx-stroke: #333;"/>
+
+<Rectangle x="521" y="505" width="4" height="25" style="-fx-fill: #666;"/>
+<Rectangle x="513" y="518" width="20" height="12" style="-fx-fill: white; -fx-stroke: #333;"/>
+
+<!-- Bus stops -->
+<Rectangle x="260" y="100" width="40" height="20" style="-fx-fill: #777; -fx-stroke: #999;"/>
+<Rectangle x="265" y="90" width="30" height="15" style="-fx-fill: rgba(200,200,200,0.8); -fx-stroke: #333;"/>
+
+<Rectangle x="500" y="100" width="40" height="20" style="-fx-fill: #777; -fx-stroke: #999;"/>
+<Rectangle x="505" y="90" width="30" height="15" style="-fx-fill: rgba(200,200,200,0.8); -fx-stroke: #333;"/>
+
+<!-- Some parked cars -->
+<Rectangle x="175" y="225" width="12" height="25" style="-fx-fill: #0066cc; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<!-- Some parked cars -->
+<Rectangle x="175" y="225" width="12" height="25" style="-fx-fill: #0066cc; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="195" y="225" width="12" height="25" style="-fx-fill: #cc6600; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="215" y="225" width="12" height="25" style="-fx-fill: #006600; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+
+<Rectangle x="555" y="225" width="12" height="25" style="-fx-fill: #cc0066; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="575" y="225" width="12" height="25" style="-fx-fill: #666666; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="595" y="225" width="12" height="25" style="-fx-fill: #ffffff; -fx-arc-width: 3; -fx-arc-height: 3; -fx-stroke: #333;"/>
+
+<Rectangle x="175" y="545" width="12" height="25" style="-fx-fill: #ffcc00; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="195" y="545" width="12" height="25" style="-fx-fill: #330066; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+
+<Rectangle x="555" y="545" width="12" height="25" style="-fx-fill: #ff6600; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="575" y="545" width="12" height="25" style="-fx-fill: #003366; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="595" y="545" width="12" height="25" style="-fx-fill: #990033; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+
+<!-- Street lamps -->
+<Rectangle x="285" y="200" width="3" height="30" style="-fx-fill: #444;"/>
+<Circle centerX="286.5" centerY="203" radius="4" style="-fx-fill: #ffffaa; -fx-stroke: #666;"/>
+
+<Rectangle x="512" y="200" width="3" height="30" style="-fx-fill: #444;"/>
+<Circle centerX="513.5" centerY="203" radius="4" style="-fx-fill: #ffffaa; -fx-stroke: #666;"/>
+
+<Rectangle x="285" y="570" width="3" height="30" style="-fx-fill: #444;"/>
+<Circle centerX="286.5" centerY="573" radius="4" style="-fx-fill: #ffffaa; -fx-stroke: #666;"/>
+
+<Rectangle x="512" y="570" width="3" height="30" style="-fx-fill: #444;"/>
+<Circle centerX="513.5" centerY="573" radius="4" style="-fx-fill: #ffffaa; -fx-stroke: #666;"/>
+
+<!-- Fire hydrants -->
+<Rectangle x="270" y="190" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="524" y="190" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="270" y="590" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+<Rectangle x="524" y="590" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
+
+<!-- Road edge markings -->
+<Rectangle x="320" y="0" width="160" height="4" style="-fx-fill: white;"/>
+<Rectangle x="320" y="796" width="160" height="4" style="-fx-fill: white;"/>
+<Rectangle x="0" y="320" width="4" height="160" style="-fx-fill: white;"/>
+<Rectangle x="796" y="320" width="4" height="160" style="-fx-fill: white;"/>
+
+<!-- Turn arrows painted on road (adjusted for thinner roads) -->
+<!-- Left turn arrows -->
+<Text x="365" y="310" text="←" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+<Text x="395" y="310" text="↑" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+
+<Text x="365" y="500" text="→" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+<Text x="395" y="500" text="↓" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+
+<Text x="310" y="375" text="↑" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+<Text x="310" y="405" text="←" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+
+<Text x="490" y="375" text="↓" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+<Text x="490" y="405" text="→" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+
+<!-- Intersection center circle (optional landmark) -->
+<Circle centerX="400" centerY="400" radius="6" style="-fx-fill: #228B22; -fx-stroke: white; -fx-stroke-width: 1;"/>
+
+<!-- Road edge markings (adjusted for thinner roads) -->
+<Rectangle x="340" y="0" width="120" height="4" style="-fx-fill: white;"/>
+<Rectangle x="340" y="796" width="120" height="4" style="-fx-fill: white;"/>
+<Rectangle x="0" y="340" width="4" height="120" style="-fx-fill: white;"/>
+<Rectangle x="796" y="340" width="4" height="120" style="-fx-fill: white;"/>
+
+</Pane>
 </StackPane>

@@ -1,7 +1,7 @@
 package jraffic.service;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import jraffic.helpers.Constants;
 import jraffic.helpers.Direction;
 import jraffic.helpers.Towards;
@@ -11,30 +11,37 @@ public class Car {
     private int x;
     private int y;
     private Direction direction;
-    private Towards toward = Towards.Left;
-    private Color color;
+    private Towards toward;
     private final int width = 50;
     private final int height = 50;
-    private Rectangle shape;
     public boolean isPass = false;
 
+    private ImageView shape;
+    private String color; // "blue", "yellow", "green"
+
+    public boolean isWait = false;
+    public boolean isInIntersectoin = false;
+
     public Car(Direction d, Towards t, int id) {
-        this.id = id;
         direction = d;
         toward = t;
+        this.id = id;
+        // pick car color based on "towards" - Updated mapping
         switch (t) {
             case Forward:
-                color = Constants.ORANGE;
+                color = "blue"; // Blue cars go forward
                 break;
             case Left:
-                color = Constants.BLUE;
+                color = "green"; // Green cars turn left
                 break;
             case Right:
-                color = Constants.YELLOW;
+                color = "yellow"; // Yellow cars turn right
                 break;
             default:
-                throw new AssertionError();
+                color = "blue";
         }
+
+        // starting position
         switch (d) {
             case Up:
                 x = Constants.START_TOP[0];
@@ -64,10 +71,6 @@ public class Car {
         return direction;
     }
 
-    public Towards getToward() {
-        return toward;
-    }
-
     public int getX() {
         return x;
     }
@@ -76,10 +79,12 @@ public class Car {
         return y;
     }
 
-    public Rectangle getShape() {
-        // singlton desgin pattenrs
+    public ImageView getShape() {
         if (shape == null) {
-            shape = new Rectangle(width, height, color);
+            shape = new ImageView();
+            shape.setFitWidth(width);
+            shape.setFitHeight(height);
+            updateImage(); // load initial image
             shape.setX(x);
             shape.setY(y);
         }
@@ -87,13 +92,17 @@ public class Car {
     }
 
     public void move() {
-
+        // same movement logic
         switch (direction) {
             case Up:
                 if (toward.equals(toward.Right) && y >= Constants.ROAD_HEIGHT) {
                     x -= Constants.SPEED;
+                    direction = Direction.Right;
+                    toward = Towards.Forward;
                 } else if (toward.equals(toward.Left) && y >= Constants.ROAD_HEIGHT + height) {
                     x += Constants.SPEED;
+                    direction = Direction.Left;
+                    toward = Towards.Forward;
                 } else {
                     y += Constants.SPEED;
                 }
@@ -102,8 +111,12 @@ public class Car {
                 if (toward.equals(toward.Right)
                         && y + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
                     x += Constants.SPEED;
+                    direction = Direction.Left;
+                    toward = Towards.Forward;
                 } else if (toward.equals(toward.Left) && y <= Constants.ROAD_HEIGHT) {
                     x -= Constants.SPEED;
+                    direction = Direction.Right;
+                    toward = Towards.Forward;
                 } else {
                     y -= Constants.SPEED;
                 }
@@ -111,8 +124,12 @@ public class Car {
             case Left:
                 if (toward.equals(toward.Right) && x >= Constants.ROAD_HEIGHT) {
                     y += Constants.SPEED;
+                    direction = Direction.Up;
+                    toward = Towards.Forward;
                 } else if (toward.equals(toward.Left) && x >= Constants.ROAD_HEIGHT + height) {
                     y -= Constants.SPEED;
+                    direction = Direction.Down;
+                    toward = Towards.Forward;
                 } else {
                     x += Constants.SPEED;
                 }
@@ -121,9 +138,13 @@ public class Car {
                 if (toward.equals(toward.Right)
                         && x + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
                     y -= Constants.SPEED;
+                    direction = Direction.Down;
+                    toward = Towards.Forward;
                 } else if (toward.equals(toward.Left)
                         && x <= Constants.ROAD_HEIGHT) {
                     y += Constants.SPEED;
+                    direction = Direction.Up;
+                    toward = Towards.Forward;
                 } else {
                     x -= Constants.SPEED;
                 }
@@ -131,6 +152,7 @@ public class Car {
             default:
         }
         updateShape();
+        updateImage(); // refresh image when direction changes
     }
 
     private void updateShape() {
@@ -138,4 +160,27 @@ public class Car {
         shape.setY(y);
     }
 
+    private void updateImage() {
+        int dirNum;
+        switch (direction) {
+            case Up:
+                dirNum = 4;
+                break;
+            case Right:
+                dirNum = 1;
+                break;
+            case Down:
+                dirNum = 2;
+                break;
+            case Left:
+                dirNum = 3;
+                break;
+            default:
+                dirNum = 1;
+        }
+
+        String filename = String.format("/jraffic/car_24px_%s_%d.png", color, dirNum);
+        Image carImg = new Image(getClass().getResource(filename).toString());
+        shape.setImage(carImg);
+    }
 }
