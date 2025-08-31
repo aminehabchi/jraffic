@@ -39,6 +39,6 @@ public class Constants {
 
     // max cars in every road
     public static final int MAXCARS = ROAD_HEIGHT / SAFEDISTANCE;
-    public static final  int TIME=SAFEDISTANCE/SPEED;
+    public static final int DELAY = (CARSIZE * 16 + (CARSIZE / 4) * 16) / SPEED;
 
 }

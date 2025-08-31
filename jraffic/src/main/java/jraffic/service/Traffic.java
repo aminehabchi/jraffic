@@ -23,11 +23,10 @@ public class Traffic {
     private TrafficHelper helper;
     private int id;
     private final long[] lastCarTime = new long[5]; // [UP, DOWN, LEFT, RIGHT]
-    private final long cooldownMs = Constants.TIME; // 3 seconds cooldown per direction
- 
+
     public Traffic(Pane roadPane, RoadController roadController) {
         this.roadPane = roadPane;
-         id = 0;
+        id = 0;
         this.id = 0;
         this.carsT = new ArrayList<>();
         this.carsD = new ArrayList<>();
@@ -175,47 +174,34 @@ public class Traffic {
     }
 
     public void createCar(KeyCode code) {
-        long nowTime = System.currentTimeMillis()/15;
+        // 1. Get direction from key
         Direction direction = helper.getDirectionFromKeyCode(code);
+        if (direction == null)
+            return;
+
+        // 2. Get the list for this direction
         List<Car> targetList = getCarListByDirection(direction);
+
+        // 3. Direction index for lastCarTime array
         int directionIndex = getDirectionIndex(code);
-        if (direction != null && targetList != null
-                && canCreateCar(directionIndex, nowTime)
-                && targetList.size() <= Constants.MAXCARS) {
- 
-            Car car = new Car(direction, helper.getRandomTowards(), id++);
-            targetList.add(car);
-            roadPane.getChildren().add(car.getShape());
 
-             lastCarTime[directionIndex] = nowTime;
+        // 4. Check max cars
+        if (targetList.size() >= Constants.MAXCARS)
+            return;
 
-            System.out.println("Car created: " + code + " | Cars in lane: " + targetList.size());
+        // 5. Check time since last car
+        long now = System.currentTimeMillis();
+        if (now - lastCarTime[directionIndex] < Constants.DELAY)
+            return;
 
-        } else {
-            // Print why car creation was blocked
-            // printBlockedMessage(code, directionIndex, nowTime, targetList);
-        }
+        // 6. Create car
+        Car car = new Car(direction, helper.getRandomTowards(), id++);
+        targetList.add(car);
+        roadPane.getChildren().add(car.getShape());
+
+        // 7. Update last spawn time
+        lastCarTime[directionIndex] = now;
     }
-
-    // private void printBlockedMessage(KeyCode code, int directionIndex, long currentTime, List<Car> targetList) {
-    //     if (directionIndex == -1) {
-    //         return; // Invalid key
-    //     }
-
-    //     if (targetList != null && targetList.size() > Constants.MAXCARS) {
-    //         System.out.println("❌ " + code + " - Max cars reached (" + Constants.MAXCARS + ")");
-    //         return;
-    //     }
-
-    //     if (!canCreateCar(directionIndex, currentTime)) {
-    //         long timeSinceLastCar = currentTime - lastCarTime[directionIndex];
-    //         long remainingTime = cooldownMs - timeSinceLastCar;
-    //         double remainingSeconds = remainingTime / 1000.0;
-
-    //         System.out.println("❌ " + code + " cooldown - wait "
-    //                 + String.format("%.1f", remainingSeconds) + "s");
-    //     }
-    // }
 
     private int getDirectionIndex(KeyCode code) {
         switch (code) {
@@ -230,11 +216,6 @@ public class Traffic {
             default:
                 return -1;
         }
-    }
-
-    private boolean canCreateCar(int directionIndex, long currentTime) {
-        long timeSinceLastCar = currentTime - lastCarTime[directionIndex];
-        return timeSinceLastCar >= cooldownMs;
     }
 
     private List<Car> getCarListByDirection(Direction direction) {
@@ -305,9 +286,9 @@ class TrafficHelper {
     /**
      * Moves cars in a list maintaining safe distance
      *
-     * @param cars List of cars to move
+     * @param cars       List of cars to move
      * @param isVertical true for vertical movement (Y axis), false for
-     * horizontal (X axis)
+     *                   horizontal (X axis)
      */
     public void moveCarList(List<Car> cars, boolean isVertical) {
         for (int i = 0; i < cars.size(); i++) {
