@@ -18,22 +18,23 @@ public class Traffic {
     public List<Car> carsL;
     public List<Car> carsR;
     public List<Car> carsInside;
+    public List<Car> carsOutside;
     private Pane roadPane;
     private TrafficHelper helper;
     private int id;
     private final long[] lastCarTime = new long[5]; // [UP, DOWN, LEFT, RIGHT]
     private final long cooldownMs = Constants.TIME; // 3 seconds cooldown per direction
-    private RoadController roadController;
-
+ 
     public Traffic(Pane roadPane, RoadController roadController) {
         this.roadPane = roadPane;
-        this.roadController = roadController;
-        id = 0;
+         id = 0;
+        this.id = 0;
         this.carsT = new ArrayList<>();
         this.carsD = new ArrayList<>();
         this.carsL = new ArrayList<>();
         this.carsR = new ArrayList<>();
         this.carsInside = new ArrayList<>();
+        this.carsOutside = new ArrayList<>();
         this.helper = new TrafficHelper();
     }
 
@@ -42,13 +43,60 @@ public class Traffic {
         helper.moveCarList(carsD, true);
         helper.moveCarList(carsL, false); // false for horizontal movement
         helper.moveCarList(carsR, false);
+
+        // Move cars outside intersection
+        for (Car c : carsOutside) {
+            c.move();
+        }
+
+        // Remove cars that are completely off screen
+        for (int i = carsOutside.size() - 1; i >= 0; i--) {
+            Car car = carsOutside.get(i);
+            if (isCarOutside(0, 0, 800, (int) car.getX(), (int) car.getY(), Constants.CARSIZE)) {
+                roadPane.getChildren().remove(car.getShape());
+                carsOutside.remove(i);
+            }
+        }
+
+        // Move cars inside intersection
+        for (Car c : carsInside) {
+            c.move();
+        }
+
+        // Move cars from inside to outside when they exit intersection
+        for (int i = carsInside.size() - 1; i >= 0; i--) {
+            Car car = carsInside.get(i);
+            if (isCarOutside(350, 350, 100, (int) car.getX(), (int) car.getY(), Constants.CARSIZE)) {
+                carsOutside.add(car);
+                carsInside.remove(i);
+            }
+        }
+
         algo();
-        for (var cars : carsInside) {
-            // System.out.println("**" + cars.getDirection());
-        }
-        if (Math.random() < 0.01) { // 1% chance each frame
-            roadController.updateTrafficLightsBasedOnCars();
-        }
+        System.err.println("Inside: " + carsInside.size() + " Outside: " + carsOutside.size()
+                + " T: " + carsT.size() + " D: " + carsD.size()
+                + " R: " + carsR.size() + " L: " + carsL.size());
+    }
+
+    public boolean isCarOutside(int x, int y, int rectSize, int carX, int carY, int carSize) {
+        int rectLeft = x;
+        int rectTop = y;
+        int rectRight = x + rectSize;
+        int rectBottom = y + rectSize;
+
+        int carLeft = carX;
+        int carTop = carY;
+        int carRight = carX + carSize;
+        int carBottom = carY + carSize;
+
+        // Car is completely outside if it does NOT overlap at all
+        return (carRight < rectLeft
+                || // completely left
+                carLeft > rectRight
+                || // completely right
+                carBottom < rectTop
+                || // completely above
+                carTop > rectBottom); // completely below
     }
 
     private void algo() {
@@ -56,26 +104,59 @@ public class Traffic {
             return;
         }
 
-        List<Car> cars = helper.getStopedCars(carsD, carsL, carsR, carsT);
-        if (cars == null || cars.isEmpty()) {
+        List<Car> stoppedCars = helper.getStoppedCars(carsD, carsL, carsR, carsT);
+        if (stoppedCars == null || stoppedCars.isEmpty()) {
             return;
         }
-        int index = helper.getIndexOfFirstCarInQueue(cars);
-        Car car = cars.get(index);
-        car.move();
-        carsInside.add(car);
-      
-        for (int i = 0; i < cars.size(); i++) {
+
+        int index = helper.getIndexOfFirstCarInQueue(stoppedCars);
+        if (index == -1) {
+            return; // No valid cars found
+        }
+
+        Car firstCar = stoppedCars.get(index);
+        if (firstCar != null) {
+            carsInside.add(firstCar);
+            removeCarFromLane(firstCar);
+        }
+
+        // Check which other cars can move with the first car
+        for (int i = 0; i < stoppedCars.size(); i++) {
             if (i != index) {
-                Car c = cars.get(index);
-                if (checkIfCanMove(car, c)) {
-                    c.move();
-                       
-                    carsInside.add(c);
+                Car otherCar = stoppedCars.get(i);
+                if (otherCar != null && checkIfCanMove(firstCar, otherCar)) {
+                    carsInside.add(otherCar);
+                    removeCarFromLane(otherCar);
                 }
             }
         }
+    }
 
+    private void removeCarFromLane(Car car) {
+        switch (car.getDirection()) {
+            case Up:
+                if (!carsT.isEmpty() && carsT.get(0) == car) {
+                    carsT.remove(0);
+                }
+                break;
+            case Down:
+                if (!carsD.isEmpty() && carsD.get(0) == car) {
+                    carsD.remove(0);
+                }
+                break;
+            case Left:
+                if (!carsL.isEmpty() && carsL.get(0) == car) {
+                    carsL.remove(0);
+                }
+                break;
+            case Right:
+                if (!carsR.isEmpty() && carsR.get(0) == car) {
+                    carsR.remove(0);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     public boolean checkIfCanMove(Car car1, Car car2) {
@@ -83,68 +164,71 @@ public class Traffic {
             return true;
         }
 
-        if (car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up) {
+        if ((car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up)
+                || (car1.getDirection() == Direction.Up && car2.getDirection() == Direction.Down)
+                || (car1.getDirection() == Direction.Left && car2.getDirection() == Direction.Right)
+                || (car1.getDirection() == Direction.Right && car2.getDirection() == Direction.Left)) {
             return true;
         }
-        if (car2.getDirection() == Direction.Down && car1.getDirection() == Direction.Up) {
-            return true;
-        }
+
         return false;
     }
 
-    public void removeCarsofOutIntersection() {
-
-    }
-
     public void createCar(KeyCode code) {
-        Car car = null;
-        long nowTime = System.currentTimeMillis() / 15;
-        List<Car> targetList = null;
-        Direction direction = null;
-        int directionIndex = -1;
-        switch (code) {
-            case UP:
-                directionIndex = 0;
-                if (canCreateCar(directionIndex, nowTime) && carsT.size() <= Constants.MAXCARS) {
-                    direction = Direction.Up;
-                    targetList = carsT;
-                    lastCarTime[0] = nowTime;
-                }
-                break;
-            case DOWN:
-                directionIndex = 1;
-
-                if (canCreateCar(directionIndex, nowTime) && carsD.size() <= Constants.MAXCARS) {
-                    direction = Direction.Down;
-                    targetList = carsD;
-                    lastCarTime[1] = nowTime;
-                }
-                break;
-            case LEFT:
-                directionIndex = 2;
-                if (canCreateCar(directionIndex, nowTime) && carsL.size() <= Constants.MAXCARS) {
-                    direction = Direction.Left;
-                    targetList = carsL;
-                    lastCarTime[2] = nowTime;
-                }
-                break;
-            case RIGHT:
-                directionIndex = 3;
-                if (canCreateCar(directionIndex, nowTime) && carsR.size() <= Constants.MAXCARS) {
-                    direction = Direction.Right;
-                    targetList = carsR;
-                    lastCarTime[3] = nowTime;
-                }
-                break;
-            default:
-                return;
-        }
-
-        if (direction != null && targetList != null) {
-            car = new Car(direction, helper.getRandomTowards(), id);
-            id++;
+        long nowTime = System.currentTimeMillis()/15;
+        Direction direction = helper.getDirectionFromKeyCode(code);
+        List<Car> targetList = getCarListByDirection(direction);
+        int directionIndex = getDirectionIndex(code);
+        if (direction != null && targetList != null
+                && canCreateCar(directionIndex, nowTime)
+                && targetList.size() <= Constants.MAXCARS) {
+ 
+            Car car = new Car(direction, helper.getRandomTowards(), id++);
             targetList.add(car);
             roadPane.getChildren().add(car.getShape());
+
+             lastCarTime[directionIndex] = nowTime;
+
+            System.out.println("Car created: " + code + " | Cars in lane: " + targetList.size());
+
+        } else {
+            // Print why car creation was blocked
+            // printBlockedMessage(code, directionIndex, nowTime, targetList);
+        }
+    }
+
+    // private void printBlockedMessage(KeyCode code, int directionIndex, long currentTime, List<Car> targetList) {
+    //     if (directionIndex == -1) {
+    //         return; // Invalid key
+    //     }
+
+    //     if (targetList != null && targetList.size() > Constants.MAXCARS) {
+    //         System.out.println("❌ " + code + " - Max cars reached (" + Constants.MAXCARS + ")");
+    //         return;
+    //     }
+
+    //     if (!canCreateCar(directionIndex, currentTime)) {
+    //         long timeSinceLastCar = currentTime - lastCarTime[directionIndex];
+    //         long remainingTime = cooldownMs - timeSinceLastCar;
+    //         double remainingSeconds = remainingTime / 1000.0;
+
+    //         System.out.println("❌ " + code + " cooldown - wait "
+    //                 + String.format("%.1f", remainingSeconds) + "s");
+    //     }
+    // }
+
+    private int getDirectionIndex(KeyCode code) {
+        switch (code) {
+            case UP:
+                return 0;
+            case DOWN:
+                return 1;
+            case LEFT:
+                return 2;
+            case RIGHT:
+                return 3;
+            default:
+                return -1;
         }
     }
 
@@ -153,6 +237,24 @@ public class Traffic {
         return timeSinceLastCar >= cooldownMs;
     }
 
+    private List<Car> getCarListByDirection(Direction direction) {
+        if (direction == null) {
+            return null;
+        }
+
+        switch (direction) {
+            case Up:
+                return carsT;
+            case Down:
+                return carsD;
+            case Left:
+                return carsL;
+            case Right:
+                return carsR;
+            default:
+                return null;
+        }
+    }
 }
 
 class TrafficHelper {
@@ -169,53 +271,56 @@ class TrafficHelper {
 
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
-            int id = car.getId();
-            if (id < minId) {
-                minId = id;
-                minIndex = i;
+            if (car != null) {
+                int id = car.getId();
+                if (id < minId) {
+                    minId = id;
+                    minIndex = i;
+                }
             }
         }
         return minIndex;
     }
 
-    public List<Car> getStopedCars(List<Car> cars1, List<Car> cars2, List<Car> cars3, List<Car> cars4) {
-        List<Car> cars = new ArrayList<>();
+    public List<Car> getStoppedCars(List<Car> cars1, List<Car> cars2, List<Car> cars3, List<Car> cars4) {
+        List<Car> stoppedCars = new ArrayList<>();
 
-        if (!cars1.isEmpty()) {
-            if (isMustStop(cars1.get(0))) {
-                cars.add(cars1.get(0));
-            }
-        }
-        if (!cars2.isEmpty()) {
-            if (isMustStop(cars2.get(0))) {
-                cars.add(cars2.get(0));
-            }
-        }
-        if (!cars3.isEmpty()) {
-            if (isMustStop(cars3.get(0))) {
-                cars.add(cars3.get(0));
-            }
-        }
-        if (!cars4.isEmpty()) {
-            if (isMustStop(cars4.get(0))) {
-                cars.add(cars4.get(0));
-            }
-        }
+        stoppedCars.add(getFirstStoppedCar(cars1));
+        stoppedCars.add(getFirstStoppedCar(cars2));
+        stoppedCars.add(getFirstStoppedCar(cars3));
+        stoppedCars.add(getFirstStoppedCar(cars4));
 
-        return cars;
+        return stoppedCars;
     }
 
+    private Car getFirstStoppedCar(List<Car> cars) {
+        if (cars.isEmpty()) {
+            return null;
+        }
+
+        Car firstCar = cars.get(0);
+        return isMustStop(firstCar) ? firstCar : null;
+    }
+
+    /**
+     * Moves cars in a list maintaining safe distance
+     *
+     * @param cars List of cars to move
+     * @param isVertical true for vertical movement (Y axis), false for
+     * horizontal (X axis)
+     */
     public void moveCarList(List<Car> cars, boolean isVertical) {
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
-            if (isMustStop(car)) {
+            if (!car.isPass && isMustStop(car)) {
                 continue;
             }
             if (i == 0) {
                 car.move();
             } else {
                 Car previousCar = cars.get(i - 1);
-                double distance = isVertical ? Math.abs(previousCar.getY() - car.getY())
+                double distance = isVertical
+                        ? Math.abs(previousCar.getY() - car.getY())
                         : Math.abs(previousCar.getX() - car.getX());
 
                 if (distance >= Constants.SAFEDISTANCE) {
@@ -225,42 +330,58 @@ class TrafficHelper {
         }
     }
 
+    /**
+     * Determines if a car must stop based on traffic rules and intersection
+     * boundaries
+     *
+     * @param car The car to check
+     * @return true if car must stop, false otherwise
+     */
     private boolean isMustStop(Car car) {
+        if (car == null) {
+            return false;
+        }
+
         switch (car.getDirection()) {
             case Up:
-                if (Constants.ROAD_HEIGHT - Constants.CARSIZE - 2 < car.getY()
-                        && Constants.ROAD_HEIGHT - Constants.CARSIZE >= car.getY()) {
-                    return true;
-                }
-                break;
+                return car.getY() + Constants.SPEED >= Constants.ROAD_HEIGHT - Constants.CARSIZE;
             case Down:
-                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > car.getY()
-                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= car.getY()) {
-                    return true;
-                }
-                break;
+                return car.getY() - Constants.SPEED <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT;
             case Left:
-                if (Constants.ROAD_HEIGHT - Constants.CARSIZE - 2 < car.getX()
-                        && Constants.ROAD_HEIGHT - Constants.CARSIZE >= car.getX()) {
-                    return true;
-                }
-                break;
+                return car.getX() + Constants.SPEED >= Constants.ROAD_HEIGHT - Constants.CARSIZE;
             case Right:
-                if (Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT + 2 > car.getX()
-                        && Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT <= car.getX()) {
-                    return true;
-                }
-                break;
+                return car.getX() - Constants.SPEED <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT;
             default:
+                return false;
         }
-        return false;
     }
 
-    public List<Car> whoMustGoWithFirst(List<Car> cars) {
-
-        return cars;
+    /**
+     * Converts KeyCode to Direction enum
+     *
+     * @param code KeyCode from user input
+     * @return Corresponding Direction or null if invalid
+     */
+    public Direction getDirectionFromKeyCode(KeyCode code) {
+        switch (code) {
+            case UP:
+                return Direction.Up;
+            case DOWN:
+                return Direction.Down;
+            case LEFT:
+                return Direction.Left;
+            case RIGHT:
+                return Direction.Right;
+            default:
+                return null;
+        }
     }
 
+    /**
+     * Generates a random direction for cars to turn at intersection
+     *
+     * @return Random Towards direction (Forward, Left, or Right)
+     */
     public Towards getRandomTowards() {
         int method = random.nextInt(3);
         switch (method) {
