@@ -238,8 +238,9 @@ public class Traffic {
     public void createCar(KeyCode code) {
         // 1. Get direction from key
         Direction direction = helper.getDirectionFromKeyCode(code);
-        if (direction == null)
+        if (direction == null) {
             return;
+        }
 
         // 2. Get the list for this direction
         List<Car> targetList = getCarListByDirection(direction);
@@ -248,13 +249,15 @@ public class Traffic {
         int directionIndex = getDirectionIndex(direction);
 
         // 4. Check max cars
-        if (targetList.size() > Constants.MAXCARS)
+        if (targetList.size() > Constants.MAXCARS) {
             return;
+        }
 
         // 5. Check time since last car
         long now = System.currentTimeMillis();
-        if (now - lastCarTime[directionIndex] < Constants.DELAY)
+        if (now - lastCarTime[directionIndex] < Constants.DELAY) {
             return;
+        }
 
         // 6. Create car
         Car car = new Car(direction, helper.getRandomTowards(), id++);
@@ -397,6 +400,9 @@ class TrafficHelper {
                 return Direction.Right;
             case R:
                 return randomDirection();
+            case ESCAPE:
+                System.exit(0);
+                return null;
             default:
                 return null;
         }
