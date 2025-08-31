@@ -16,8 +16,7 @@ public class Car {
     private final int width = 50;
     private final int height = 50;
     private Rectangle shape;
-    public boolean isWait = false;
-    public boolean isInIntersectoin = false;
+    public boolean isPass = false;
 
     public Car(Direction d, Towards t, int id) {
         this.id = id;
