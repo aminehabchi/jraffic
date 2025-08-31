@@ -159,9 +159,7 @@ public class Traffic {
     }
 
     public boolean checkIfCanMove(Car car1, Car car2) {
-        if (car2.getToward() == Towards.Right) {
-            return true;
-        }
+        
 
         if ((car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up)
                 || (car1.getDirection() == Direction.Up && car2.getDirection() == Direction.Down)
@@ -186,7 +184,7 @@ public class Traffic {
         int directionIndex = getDirectionIndex(code);
 
         // 4. Check max cars
-        if (targetList.size() >= Constants.MAXCARS)
+        if (targetList.size() > Constants.MAXCARS)
             return;
 
         // 5. Check time since last car
