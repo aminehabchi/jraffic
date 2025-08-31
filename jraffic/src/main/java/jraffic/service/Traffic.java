@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import jraffic.RoadController;
 import jraffic.helpers.Constants;
 import jraffic.helpers.Direction;
 import jraffic.helpers.Towards;
@@ -22,9 +23,11 @@ public class Traffic {
     private int id;
     private final long[] lastCarTime = new long[5]; // [UP, DOWN, LEFT, RIGHT]
     private final long cooldownMs = Constants.TIME; // 3 seconds cooldown per direction
+    private RoadController roadController;
 
-    public Traffic(Pane roadPane) {
+    public Traffic(Pane roadPane, RoadController roadController) {
         this.roadPane = roadPane;
+        this.roadController = roadController;
         id = 0;
         this.carsT = new ArrayList<>();
         this.carsD = new ArrayList<>();
@@ -40,6 +43,12 @@ public class Traffic {
         helper.moveCarList(carsL, false); // false for horizontal movement
         helper.moveCarList(carsR, false);
         algo();
+        for (var cars : carsInside) {
+            // System.out.println("**" + cars.getDirection());
+        }
+        if (Math.random() < 0.01) { // 1% chance each frame
+            roadController.updateTrafficLightsBasedOnCars();
+        }
     }
 
     private void algo() {
@@ -55,11 +64,13 @@ public class Traffic {
         Car car = cars.get(index);
         car.move();
         carsInside.add(car);
+      
         for (int i = 0; i < cars.size(); i++) {
             if (i != index) {
                 Car c = cars.get(index);
                 if (checkIfCanMove(car, c)) {
                     c.move();
+                       
                     carsInside.add(c);
                 }
             }
@@ -90,7 +101,7 @@ public class Traffic {
         long nowTime = System.currentTimeMillis() / 15;
         List<Car> targetList = null;
         Direction direction = null;
-        int directionIndex = 1;
+        int directionIndex = -1;
         switch (code) {
             case UP:
                 directionIndex = 0;
@@ -141,6 +152,7 @@ public class Traffic {
         long timeSinceLastCar = currentTime - lastCarTime[directionIndex];
         return timeSinceLastCar >= cooldownMs;
     }
+
 }
 
 class TrafficHelper {
