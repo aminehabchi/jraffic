@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import jraffic.RoadController;
 import jraffic.helpers.Constants;
 import jraffic.helpers.Direction;
@@ -23,8 +24,10 @@ public class Traffic {
     private TrafficHelper helper;
     private int id;
     private final long[] lastCarTime = new long[4]; // [UP, DOWN, LEFT, RIGHT]
+    private RoadController roadController;
 
     public Traffic(Pane roadPane, RoadController roadController) {
+        this.roadController = roadController;
         this.roadPane = roadPane;
         id = 0;
         this.id = 0;
@@ -71,7 +74,7 @@ public class Traffic {
             }
         }
 
-        /// 
+        ///
 
         algo();
         System.err.println("Inside: " + carsInside.size() + " Outside: " + carsOutside.size()
@@ -112,6 +115,7 @@ public class Traffic {
 
         int index = helper.getIndexOfFirstCarInQueue(stoppedCars);
         if (index == -1) {
+            turnOffAllLights();
             return; // No valid cars found
         }
 
@@ -129,6 +133,65 @@ public class Traffic {
                     carsInside.add(otherCar);
                     removeCarFromLane(otherCar);
                 }
+            }
+        }
+
+        updateLights();
+    }
+
+    private final Color DARK_RED = Color.web("#660000");
+    private final Color RED = Color.web("#ff4444");
+    private final Color DARK_GREEN = Color.web("#006600");
+    private final Color GREEN = Color.web("#44ff44");
+
+    private void turnOffAllLights() {
+        roadController.upRed.setFill(DARK_RED);
+        roadController.upGreen.setFill(DARK_GREEN);
+
+        roadController.downRed.setFill(DARK_RED);
+        roadController.downGreen.setFill(DARK_GREEN);
+
+        roadController.leftRed.setFill(DARK_RED);
+        roadController.leftGreen.setFill(DARK_GREEN);
+
+        roadController.rightRed.setFill(DARK_RED);
+        roadController.rightGreen.setFill(DARK_GREEN);
+    }
+
+    private void updateLights() {
+        turnOffAllLights();
+
+        // Set red lights for stopped cars
+        if (!carsT.isEmpty() && helper.isMustStop(carsT.get(0))) {
+            roadController.upRed.setFill(RED);
+        }
+        if (!carsD.isEmpty() && helper.isMustStop(carsD.get(0))) {
+            roadController.downRed.setFill(RED);
+        }
+        if (!carsL.isEmpty() && helper.isMustStop(carsL.get(0))) {
+            roadController.leftRed.setFill(RED);
+        }
+        if (!carsR.isEmpty() && helper.isMustStop(carsR.get(0))) {
+            roadController.rightRed.setFill(RED);
+        }
+
+        // Set green lights for cars currently in intersection
+        for (Car c : carsInside) {
+            switch (c.getDirection()) {
+                case Up:
+                    roadController.upGreen.setFill(GREEN);
+                    break;
+                case Down:
+                    roadController.downGreen.setFill(GREEN);
+                    break;
+                case Left:
+                    roadController.leftGreen.setFill(GREEN);
+                    break;
+                case Right:
+                    roadController.rightGreen.setFill(GREEN);
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -303,7 +366,7 @@ class TrafficHelper {
         }
     }
 
-    private boolean isMustStop(Car car) {
+    public boolean isMustStop(Car car) {
         if (car == null) {
             return false;
         }
