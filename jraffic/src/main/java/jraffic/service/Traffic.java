@@ -12,52 +12,185 @@ import jraffic.helpers.Towards;
 
 public class Traffic {
 
-    public List<Car> cars;
+    public List<Car> carsT;
+    public List<Car> carsD;
+    public List<Car> carsL;
+    public List<Car> carsR;
+    public List<Car> carsInside;
     private Pane roadPane;
-    private Direction direction;
-    private Random random;
-    private int[] carNbr = { 0, 0, 0, 0 };
+    private TrafficHelper helper;
+    private int id;
 
     public Traffic(Pane roadPane) {
         this.roadPane = roadPane;
-        this.cars = new ArrayList<>();
+        id = 0;
+        this.carsT = new ArrayList<>();
+        this.carsD = new ArrayList<>();
+        this.carsL = new ArrayList<>();
+        this.carsR = new ArrayList<>();
+        this.carsInside = new ArrayList<>();
+        this.helper = new TrafficHelper();
     }
 
     public void moveCars() {
-        int a = -100;
-        int b = -100;
-        int c = -100;
-        int d = -100;
+        helper.moveCarList(carsT, true); // true for vertical movement
+        helper.moveCarList(carsD, true);
+        helper.moveCarList(carsL, false); // false for horizontal movement
+        helper.moveCarList(carsR, false);
+        algo();
+    }
+
+    private void algo() {
+        if (!carsInside.isEmpty()) {
+            return;
+        }
+
+        List<Car> cars = helper.getStopedCars(carsD, carsL, carsR, carsT);
+        if (cars == null || cars.isEmpty()) {
+            return;
+        }
+        int index = helper.getIndexOfFirstCarInQueue(cars);
+        Car car = cars.get(index);
+        car.move();
+        carsInside.add(car);
+        for (int i = 0; i < cars.size(); i++) {
+            if (i != index) {
+                Car c = cars.get(index);
+                if (checkIfCanMove(car, c)) {
+                    c.move();
+                    carsInside.add(c);
+                }
+            }
+        }
+
+    }
+
+    public boolean checkIfCanMove(Car car1, Car car2) {
+        if (car2.getToward() == Towards.Right) {
+            return true;
+        }
+
+        if (car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up) {
+            return true;
+        }
+        if (car2.getDirection() == Direction.Down && car1.getDirection() == Direction.Up) {
+            return true;
+        }
+        return false;
+    }
+
+    public void removeCarsofOutIntersection(){
+
+    }
+
+    public void createCar(KeyCode code) {
+        Car car = null;
+        List<Car> targetList = null;
+        Direction direction = null;
+
+        switch (code) {
+            case UP:
+                if (carsT.size() <= Constants.MAXCARS) {
+                    direction = Direction.Up;
+                    targetList = carsT;
+                }
+                break;
+            case DOWN:
+                if (carsD.size() <= Constants.MAXCARS) {
+                    direction = Direction.Down;
+                    targetList = carsD;
+                }
+                break;
+            case LEFT:
+                if (carsL.size() <= Constants.MAXCARS) {
+                    direction = Direction.Left;
+                    targetList = carsL;
+                }
+                break;
+            case RIGHT:
+                if (carsR.size() <= Constants.MAXCARS) {
+                    direction = Direction.Right;
+                    targetList = carsR;
+                }
+                break;
+            default:
+                return;
+        }
+
+        if (direction != null && targetList != null) {
+            car = new Car(direction, helper.getRandomTowards(), id);
+            id++;
+            targetList.add(car);
+            roadPane.getChildren().add(car.getShape());
+        }
+    }
+}
+
+class TrafficHelper {
+    private Random random;
+
+    public TrafficHelper() {
+        this.random = new Random();
+    }
+
+    public int getIndexOfFirstCarInQueue(List<Car> cars) {
+        int minIndex = -1;
+        int minId = Integer.MAX_VALUE;
 
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
+            int id = car.getId();
+            if (id < minId) {
+                minId = id;
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
 
-            switch (car.getDirection()) {
-                case Up:
-                    if ((a == -100 || (Math.abs(a - car.getY()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
-                        car.move();
-                    }
-                    a = car.getY();
-                    break;
-                case Down:
-                    if ((b == -100 || (Math.abs(b - car.getY()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
-                        car.move();
-                    }
-                    b = car.getY();
-                    break;
-                case Left:
-                    if ((c == -100 || (Math.abs(c - car.getX()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
-                        car.move();
-                    }
-                    c = car.getX();
-                    break;
-                case Right:
-                    if ((d == -100 || (Math.abs(d - car.getX()) >= Constants.SAFEDISTANCE)) && !isMustStop(car)) {
-                        car.move();
-                    }
-                    d = car.getX();
-                    break;
-                default:
+    public List<Car> getStopedCars(List<Car> cars1, List<Car> cars2, List<Car> cars3, List<Car> cars4) {
+        List<Car> cars = new ArrayList<>();
+
+        if (!cars1.isEmpty()) {
+            if (isMustStop(cars1.get(0))) {
+                cars.add(cars1.get(0));
+            }
+        }
+        if (!cars2.isEmpty()) {
+            if (isMustStop(cars2.get(0))) {
+                cars.add(cars2.get(0));
+            }
+        }
+        if (!cars3.isEmpty()) {
+            if (isMustStop(cars3.get(0))) {
+                cars.add(cars3.get(0));
+            }
+        }
+        if (!cars4.isEmpty()) {
+            if (isMustStop(cars4.get(0))) {
+                cars.add(cars4.get(0));
+            }
+        }
+
+        return cars;
+    }
+
+    public void moveCarList(List<Car> cars, boolean isVertical) {
+        for (int i = 0; i < cars.size(); i++) {
+            Car car = cars.get(i);
+            if (isMustStop(car)) {
+                continue;
+            }
+            if (i == 0) {
+                car.move();
+            } else {
+                Car previousCar = cars.get(i - 1);
+                double distance = isVertical ? Math.abs(previousCar.getY() - car.getY())
+                        : Math.abs(previousCar.getX() - car.getX());
+
+                if (distance >= Constants.SAFEDISTANCE) {
+                    car.move();
+                }
             }
         }
     }
@@ -93,49 +226,13 @@ public class Traffic {
         return false;
     }
 
-    public void createCar(KeyCode code) {
-        Car car = null;
-        switch (code) {
-            case UP:
-                if (carNbr[0] <= Constants.MAXCARS) {
-                    car = new Car(Direction.Up, getTowards());
-                    carNbr[0]++;
-                }
-                break;
-            case DOWN:
-                if (carNbr[1] <= Constants.MAXCARS) {
-                    car = new Car(Direction.Down, getTowards());
-                    carNbr[1]++;
-                }
-                break;
-            case LEFT:
-                if (carNbr[2] <= Constants.MAXCARS) {
-                    car = new Car(Direction.Left, getTowards());
-                    carNbr[2]++;
-                }
-                break;
-            case RIGHT:
-                if (carNbr[3] <= Constants.MAXCARS) {
-                    car = new Car(direction.Right, getTowards());
-                    carNbr[3]++;
-                }
-                break;
-            default:
-                break;
-        }
+    public List<Car> whoMustGoWithFirst(List<Car> cars) {
 
-        if (car != null) {
-            cars.add(car);
-            roadPane.getChildren().add(car.getShape());
-        }
+        return cars;
     }
 
-    private Towards getTowards() {
-        if (random == null) {
-            random = new Random();
-        }
+    public Towards getRandomTowards() {
         int method = random.nextInt(3);
-
         switch (method) {
             case 0:
                 return Towards.Forward;
@@ -147,9 +244,4 @@ public class Traffic {
                 return Towards.Forward;
         }
     }
-
-    public List<Car> getCars() {
-        return cars;
-    }
-
 }

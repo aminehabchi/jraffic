@@ -7,6 +7,7 @@ import jraffic.helpers.Direction;
 import jraffic.helpers.Towards;
 
 public class Car {
+    private int id;
     private int x;
     private int y;
     private Direction direction;
@@ -18,7 +19,8 @@ public class Car {
     public boolean isWait = false;
     public boolean isInIntersectoin = false;
 
-    public Car(Direction d, Towards t) {
+    public Car(Direction d, Towards t, int id) {
+        this.id = id;
         direction = d;
         toward = t;
         switch (t) {
@@ -55,8 +57,16 @@ public class Car {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
     public Direction getDirection() {
         return direction;
+    }
+
+    public Towards getToward() {
+        return toward;
     }
 
     public int getX() {
@@ -78,7 +88,7 @@ public class Car {
     }
 
     public void move() {
-     
+
         switch (direction) {
             case Up:
                 if (toward.equals(toward.Right) && y >= Constants.ROAD_HEIGHT) {
@@ -123,8 +133,6 @@ public class Car {
         }
         updateShape();
     }
-
-   
 
     private void updateShape() {
         shape.setX(x);
