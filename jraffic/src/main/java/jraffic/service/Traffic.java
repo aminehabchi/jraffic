@@ -22,7 +22,7 @@ public class Traffic {
     private Pane roadPane;
     private TrafficHelper helper;
     private int id;
-    private final long[] lastCarTime = new long[5]; // [UP, DOWN, LEFT, RIGHT]
+    private final long[] lastCarTime = new long[4]; // [UP, DOWN, LEFT, RIGHT]
 
     public Traffic(Pane roadPane, RoadController roadController) {
         this.roadPane = roadPane;
@@ -180,7 +180,7 @@ public class Traffic {
         List<Car> targetList = getCarListByDirection(direction);
 
         // 3. Direction index for lastCarTime array
-        int directionIndex = getDirectionIndex(code);
+        int directionIndex = getDirectionIndex(direction);
 
         // 4. Check max cars
         if (targetList.size() > Constants.MAXCARS)
@@ -200,15 +200,15 @@ public class Traffic {
         lastCarTime[directionIndex] = now;
     }
 
-    private int getDirectionIndex(KeyCode code) {
+    private int getDirectionIndex(Direction code) {
         switch (code) {
-            case UP:
+            case Up:
                 return 0;
-            case DOWN:
+            case Down:
                 return 1;
-            case LEFT:
+            case Left:
                 return 2;
-            case RIGHT:
+            case Right:
                 return 3;
             default:
                 return -1;
