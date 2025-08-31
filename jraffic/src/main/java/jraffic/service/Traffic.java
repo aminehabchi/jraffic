@@ -20,11 +20,11 @@ public class Traffic {
     public List<Car> carsR;
     public List<Car> carsInside;
     public List<Car> carsOutside;
-    private Pane roadPane;
-    private TrafficHelper helper;
+    private final Pane roadPane;
+    private final TrafficHelper helper;
     private int id;
     private final long[] lastCarTime = new long[4]; // [UP, DOWN, LEFT, RIGHT]
-    private RoadController roadController;
+    private final RoadController roadController;
 
     public Traffic(Pane roadPane, RoadController roadController) {
         this.roadController = roadController;
@@ -93,14 +93,13 @@ public class Traffic {
         int carRight = carX + carSize;
         int carBottom = carY + carSize;
 
-        // Car is completely outside if it does NOT overlap at all
         return (carRight < rectLeft
-                || // completely left
+                ||
                 carLeft > rectRight
-                || // completely right
+                ||
                 carBottom < rectTop
-                || // completely above
-                carTop > rectBottom); // completely below
+                ||
+                carTop > rectBottom);
     }
 
     private void algo() {
@@ -224,15 +223,10 @@ public class Traffic {
     }
 
     public boolean checkIfCanMove(Car car1, Car car2) {
-
-        if ((car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up)
+        return (car1.getDirection() == Direction.Down && car2.getDirection() == Direction.Up)
                 || (car1.getDirection() == Direction.Up && car2.getDirection() == Direction.Down)
                 || (car1.getDirection() == Direction.Left && car2.getDirection() == Direction.Right)
-                || (car1.getDirection() == Direction.Right && car2.getDirection() == Direction.Left)) {
-            return true;
-        }
-
-        return false;
+                || (car1.getDirection() == Direction.Right && car2.getDirection() == Direction.Left);
     }
 
     public void createCar(KeyCode code) {
@@ -305,7 +299,7 @@ public class Traffic {
 
 class TrafficHelper {
 
-    private Random random;
+    private final Random random;
 
     public TrafficHelper() {
         this.random = new Random();
@@ -351,7 +345,7 @@ class TrafficHelper {
     public void moveCarList(List<Car> cars, boolean isVertical) {
         for (int i = 0; i < cars.size(); i++) {
             Car car = cars.get(i);
-            if (!car.isPass && isMustStop(car)) {
+            if (isMustStop(car)) {
                 continue;
             }
             if (i == 0) {

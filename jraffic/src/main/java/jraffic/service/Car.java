@@ -95,11 +95,11 @@ public class Car {
         // same movement logic
         switch (direction) {
             case Up:
-                if (toward.equals(toward.Right) && y >= Constants.ROAD_HEIGHT) {
+                if (toward.equals(Towards.Right) && y >= Constants.ROAD_HEIGHT) {
                     x -= Constants.SPEED;
                     direction = Direction.Right;
                     toward = Towards.Forward;
-                } else if (toward.equals(toward.Left) && y >= Constants.ROAD_HEIGHT + height) {
+                } else if (toward.equals(Towards.Left) && y >= Constants.ROAD_HEIGHT + height) {
                     x += Constants.SPEED;
                     direction = Direction.Left;
                     toward = Towards.Forward;
@@ -108,12 +108,12 @@ public class Car {
                 }
                 break;
             case Down:
-                if (toward.equals(toward.Right)
+                if (toward.equals(Towards.Right)
                         && y + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
                     x += Constants.SPEED;
                     direction = Direction.Left;
                     toward = Towards.Forward;
-                } else if (toward.equals(toward.Left) && y <= Constants.ROAD_HEIGHT) {
+                } else if (toward.equals(Towards.Left) && y <= Constants.ROAD_HEIGHT) {
                     x -= Constants.SPEED;
                     direction = Direction.Right;
                     toward = Towards.Forward;
@@ -122,11 +122,11 @@ public class Car {
                 }
                 break;
             case Left:
-                if (toward.equals(toward.Right) && x >= Constants.ROAD_HEIGHT) {
+                if (toward.equals(Towards.Right) && x >= Constants.ROAD_HEIGHT) {
                     y += Constants.SPEED;
                     direction = Direction.Up;
                     toward = Towards.Forward;
-                } else if (toward.equals(toward.Left) && x >= Constants.ROAD_HEIGHT + height) {
+                } else if (toward.equals(Towards.Left) && x >= Constants.ROAD_HEIGHT + height) {
                     y -= Constants.SPEED;
                     direction = Direction.Down;
                     toward = Towards.Forward;
@@ -135,12 +135,12 @@ public class Car {
                 }
                 break;
             case Right:
-                if (toward.equals(toward.Right)
+                if (toward.equals(Towards.Right)
                         && x + width <= Constants.WINDOW_HEIGHT - Constants.ROAD_HEIGHT) {
                     y -= Constants.SPEED;
                     direction = Direction.Down;
                     toward = Towards.Forward;
-                } else if (toward.equals(toward.Left)
+                } else if (toward.equals(Towards.Left)
                         && x <= Constants.ROAD_HEIGHT) {
                     y += Constants.SPEED;
                     direction = Direction.Up;
