@@ -241,20 +241,16 @@ prefWidth="800" prefHeight="800" style="-fx-background-color: #2a4a3a;">
         <Rectangle x="514" y="200" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
         <Rectangle x="280" y="580" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
         <Rectangle x="514" y="580" width="6" height="12" style="-fx-fill: #cc0000; -fx-arc-width: 3; -fx-arc-height: 3;"/>
-        <!-- Road edge markings (adjusted for 100px roads) -->
-        <Rectangle x="350" y="0" width="100" height="4" style="-fx-fill: white;"/>
-        <Rectangle x="350" y="796" width="100" height="4" style="-fx-fill: white;"/>
-        <Rectangle x="0" y="350" width="4" height="100" style="-fx-fill: white;"/>
-        <Rectangle x="796" y="350" width="4" height="100" style="-fx-fill: white;"/>
+       
         <!-- Turn arrows painted on road (adjusted for 100px roads) -->
         <!-- Left turn arrows -->
-        <Text x="375" y="325" text="↑" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Text x="375" y="325" text="↓" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
         <Text x="415" y="325" text="↑" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
         <Text x="375" y="485" text="↓" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
-        <Text x="415" y="485" text="↓" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
-        <Text x="325" y="385" text="←" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
-        <Text x="325" y="415" text="←" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
-        <Text x="475" y="385" text="→" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Text x="415" y="485" text="↑" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Text x="305" y="385" text="←" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Text x="305" y="415" text="→" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
+        <Text x="475" y="385" text="←" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
         <Text x="475" y="415" text="→" style="-fx-fill: white; -fx-font-size: 16; -fx-font-weight: bold;"/>
         <!-- Intersection center circle (optional landmark) -->
         <Circle centerX="400" centerY="400" radius="6" style="-fx-fill: #228B22; -fx-stroke: white; -fx-stroke-width: 1;"/>
